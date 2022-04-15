@@ -16,15 +16,15 @@ public class AirportTest {
     static Airport h = new Airport();
 
     static {
-        h.addChild(b);
-        b.addChild(a);
-        a.addChild(f);
-        b.addChild(c);
-        c.addChild(d);
-        c.addChild(e);
-        c.addChild(e);
-        d.addChild(e);
-        e.addChild(b);
+        h.addChild(b, 87);
+        b.addChild(a, 179);
+        a.addChild(f, 72);
+        b.addChild(c, 402);
+        c.addChild(d, 126);
+        c.addChild(e, 749);
+        c.addChild(e, 320);
+        d.addChild(e, 79);
+        e.addChild(b, 312);
     }
 
     @Test
@@ -68,5 +68,15 @@ public class AirportTest {
     @Test
     public void eShouldBeOneHopFromC() {
         assertEquals(1, c.hopsTo(e));
+    }
+
+    @Test
+    public void costFromAirportToSelfShouldBeZero() {
+        assertEquals(0, c.costTo(c));
+    }
+
+    @Test
+    public void costFromHToBShouldBe87() {
+        assertEquals(87, h.costTo(b));
     }
 }
