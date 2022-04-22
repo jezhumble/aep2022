@@ -7,20 +7,17 @@ public class Route {
     private final Airport child;
     private final int cost;
 
+    public static HopStrategy HOP_STRATEGY = route -> 1;
+    public static HopStrategy COST_STRATEGY = route -> route.cost;
+
     public Route(Airport child, int cost) {
         this.child = child;
         this.cost = cost;
     }
 
-    public int hopsTo(Airport other, HashSet<Airport> airports) {
-        int hopsTo = child.hopsTo(other, airports);
+    public int hopsTo(Airport other, HashSet<Airport> airports, HopStrategy strategy) {
+        int hopsTo = child.hopsTo(other, airports, strategy);
         if (hopsTo == Airport.UNREACHABLE) return Airport.UNREACHABLE;
-        return hopsTo + 1;
-    }
-
-    public int costTo(Airport other, HashSet<Airport> airports) {
-        int costTo = child.costTo(other, airports);
-        if (costTo == Airport.UNREACHABLE) return Airport.UNREACHABLE;
-        return costTo + cost;
+        return hopsTo + strategy.cost(this);
     }
 }
