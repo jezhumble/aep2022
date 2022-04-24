@@ -20,23 +20,30 @@ public class Airport {
     }
 
     public int hopsTo(Airport destination) {
-        return hopsTo(destination, new HashSet<>(), Route.HOP_STRATEGY);
+        Path path = pathTo(destination, new HashSet<>(), Path.HOPS_STRATEGY);
+        return path.hops();
     }
 
     public int costTo(Airport destination) {
-        return hopsTo(destination, new HashSet<>(), Route.COST_STRATEGY);
+        Path path = pathTo(destination, new HashSet<>(), Path.COST_STRATEGY);
+        return path.cost();
     }
 
-    int hopsTo(Airport other, Set<Airport> visited, HopStrategy strategy) {
-        if (!visited.add(this)) return UNREACHABLE;
-        if (this.equals(other)) return 0;
-        int champion = Integer.MAX_VALUE;
+    public Path pathTo(Airport destination, HopComparisonStrategy strategy) {
+        return pathTo(destination, new HashSet<>(), strategy);
+    }
+
+    Path pathTo(Airport other, Set<Airport> visited, HopComparisonStrategy strategy) {
+        if (!visited.add(this)) return Path.UNREACHABLE;
+        if (this.equals(other)) return new Path();
+        Path champion = Path.UNREACHABLE;
         for (var child: children) {
-            int hops = child.hopsTo(other, new HashSet<>(visited), strategy);
-            if (hops != UNREACHABLE && hops < champion) {
+            Path hops = child.pathTo(other, new HashSet<>(visited), strategy);
+            if (hops.compareTo(champion, strategy) < 0) {
                 champion = hops;
             }
         }
-        return champion == Integer.MAX_VALUE ? UNREACHABLE : champion;
+        return champion;
     }
+
 }

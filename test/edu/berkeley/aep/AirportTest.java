@@ -79,4 +79,16 @@ public class AirportTest {
     public void costFromHToBShouldBe87() {
         assertEquals(87, h.costTo(b));
     }
+
+    @Test
+    public void pathFromBToEShouldHaveCost607() {
+        Path path = b.pathTo(e, Path.COST_STRATEGY);
+        assertEquals(607, path.cost());
+    }
+
+    @Test
+    public void pathFromBToEShouldHaveHops2() {
+        Path path = b.pathTo(e, Path.HOPS_STRATEGY);
+        assertEquals(2, path.hops());
+    }
 }
